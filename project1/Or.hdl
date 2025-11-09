@@ -1,0 +1,33 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/1/Or.hdl
+/**
+ * Or gate:
+ * if (a or b) out = 1, else out = 0 
+ */
+CHIP Or {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    //// Replace this comment with your code.
+    // 1. a OR b Expands to 
+    // 2. NOT(NOT(a) AND (NOT(b))
+    // taking NOT(a) and NOT(b) as x and y terms
+    // Since (a NAND b) is equal to -
+    // NOT(a AND b)
+    // 3. NOT(a) NAND NOT(b)
+    // NOT(x) can simply expand to x NAND x, Hence:
+    // 4. (a NAND a) NAND (b NAND b)
+
+    //// Implementation of OR gate using only NAND gate
+    // 4th step x term
+    Nand(a=a, b=a, out=aNANDa);
+
+    // 4th step y term
+    Nand(a=b, b=b, out=bNANDb);
+
+    // a OR b result
+    Nand(a=aNANDa, b=bNANDb, out=out);
+}

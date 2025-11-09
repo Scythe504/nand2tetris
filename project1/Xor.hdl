@@ -1,0 +1,56 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/1/Xor.hdl
+/**
+ * Exclusive-or gate:
+ * if ((a and Not(b)) or (Not(a) and b)) out = 1, else out = 0
+ */
+CHIP Xor {
+    IN a, b;
+    OUT out;
+
+    PARTS:
+    // XOR Logic Gate
+
+    // Using boolean function synthesis we get a function like
+    // 1. (NOT(b) AND a) OR (NOT (a) AND b)
+    // We know NOT(x) = x NAND x
+    // So lets take 
+    // NOT(b) = b NAND b (nb)
+    // and,
+    // NOT(a) = a NAND a (na)
+    Nand(a=a, b=a, out=na);
+    Nand(a=b, b=b, out=nb);
+
+    // Now, out = (nb AND a) OR (na AND b)
+    // We also know that 
+    // x AND y = NOT(x NAND y)
+    // t1 = nb AND a
+    // t1 term: x = na, y = b
+
+    // NOT(x) expansion will be
+    // t1 = (nb NAND a) NAND (nb NAND a)
+    // Similarly,
+    // t2 = (na NAND b) NAND (na NAND b)
+    // out = t1 OR t2
+
+    // NAND only way for finding x OR y
+    // out = (t1 NAND t1) NAND (t2 NAND t2)
+
+    // Simplifying x = t1 NAND t1
+    // x = NOT(t1)
+    // x = NOT((nb NAND a) NAND (nb NAND a))
+    // x = NOT(NOT(nb NAND a))
+    // x = nb NAND a
+    // Similarly,
+    // y = NOT(t2)
+    // y = na NAND b
+    // out = (nb NAND a) NAND (na NAND b)
+
+    // x
+    Nand(a=nb, b=a, out=x);
+    // y
+    Nand(a=na, b=b, out=y);
+    Nand(a=x, b=y, out=out);
+}	
